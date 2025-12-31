@@ -1,20 +1,26 @@
 from fastapi import FastAPI
-from datetime import datetime
+from controllers import post
+import sqlalchemy as sqa
+import databases
+from contextlib import asynccontextmanager
+
+
 #msvc - model, service, view, controller
-app = FastAPI()
+DATABASE_URL = "sqlite:///./test.db"
+metadata = sqa.MetaData()
+database = databases.Database(DATABASE_URL)
 
-fake_db = [
-    {"title": "Post 1 sobre Django", "date": datetime.now().isoformat(), "active": True},
-    {"title": "Post 2 sobre FastAPI", "date": datetime.now().isoformat(), "active": True},
-    {"title": "Post 3 sobre Flask", "date": datetime.now().isoformat(), "active": False},
-    {"title": "Post 4 sobre Pyramid", "date": datetime.now().isoformat(), "active": True},
-    ]
+engine = sqa.create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
-@app.get("/posts")
-def read_posts(skip: int = 0, limit: int = len(fake_db), active: bool = True):
-    return [post for post in fake_db[skip: skip + limit] if post["active"] == active]
+metadata.create_all(engine)
 
-@app.get("/posts/{framework}")
-def read_root(framework: int):
-    return {"posts": [{"title": f"Post 1 sobre {framework}", "date": datetime.now().isoformat()},
-                      {"title": f"Post 2 sobre {framework}", "date": datetime.now().isoformat()}]}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await database.connect()
+    yield
+    await database.disconnect()
+
+app = FastAPI(lifespan=lifespan)
+app.include_router(post.router)
+
+

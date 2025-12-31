@@ -1,0 +1,59 @@
+{
+    "clientes": [
+        {
+            "nome": "Guilherme Silva",
+            "num_cliente": "123",
+            "data_nascimento": "01-01-2001",
+            "endereco": "rua, 123 - jardim - campinas/SP",
+            "contas": [
+                {
+                    "numero_conta": 1,
+                    "agencia": "0001"
+                }
+            ],
+            "senha": "321"
+        },
+        {
+            "nome": "Pedro Silva",
+            "num_cliente": "152",
+            "data_nascimento": "01-01-2002",
+            "endereco": "avenida, 321 - jardim - caldas/MG",
+            "contas": [
+                {
+                    "numero_conta": 2,
+                    "agencia": "0001"
+                }
+            ],
+            "senha": "111"
+        }
+    ],
+    "contas": [
+        {
+            "numero_conta": 1,
+            "num_cliente": "123",
+            "agencia": "0001",
+            "saldo": 400.1,
+            "senha": "1212",
+            "historico": [
+                {
+                    "tipo": "Deposito",
+                    "valor": 150.0,
+                    "data_hora": "2025-12-24 20:48:45"
+                },
+                {
+                    "tipo": "Deposito",
+                    "valor": 250.1,
+                    "data_hora": "2025-12-24 20:49:17"
+                }
+            ]
+        },
+        {
+            "numero_conta": 2,
+            "num_cliente": "152",
+            "agencia": "0001",
+            "saldo": 0.0,
+            "senha": "222",
+            "historico": []
+        }
+    ]
+}
