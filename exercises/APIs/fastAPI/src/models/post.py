@@ -1,5 +1,5 @@
 import sqlalchemy as sqa
-from main import metadata
+from database import metadata
 posts = sqa.Table(
     'posts',
     metadata,

@@ -1,26 +1,22 @@
 from fastapi import FastAPI
-from controllers import post
-import sqlalchemy as sqa
-import databases
+from controllers import post, auth
+from database import database, engine, metadata
 from contextlib import asynccontextmanager
 
 
 #msvc - model, service, view, controller
-DATABASE_URL = "sqlite:///./test.db"
-metadata = sqa.MetaData()
-database = databases.Database(DATABASE_URL)
-
-engine = sqa.create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
-metadata.create_all(engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    from models.post import posts # noqa
+    metadata.create_all(engine)
+    
     await database.connect()
     yield
     await database.disconnect()
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(auth.router)
 app.include_router(post.router)
 
 
